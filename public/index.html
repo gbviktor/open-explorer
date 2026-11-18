@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open Explorer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f4b400' d='M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="titlebar">
+      <div class="navbtns">
+        <button class="icon-btn" id="btnBack" title="Back (Alt+Left)"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="icon-btn" id="btnFwd" title="Forward (Alt+Right)"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button class="icon-btn" id="btnUp" title="Up (Alt+Up / Backspace)"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        <button class="icon-btn" id="btnRefresh" title="Refresh (F5)"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg></button>
+      </div>
+      <div class="address" id="address">
+        <div class="crumbs" id="crumbs"></div>
+        <input id="addrInput" class="addr-input" spellcheck="false" autocomplete="off" hidden>
+      </div>
+      <div class="searchbox">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+        <input id="searchInput" placeholder="Search" spellcheck="false" autocomplete="off">
+      </div>
+    </header>
+
+    <div class="commandbar" id="commandbar">
+      <div class="cmd-group">
+        <button class="cmd" data-cmd="newfolder" title="New folder (Ctrl+Shift+N)"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 10v6M9 13h6"/></svg><span>New folder</span></button>
+        <button class="cmd" data-cmd="newfile" title="New text file"><svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M12 12v6M9 15h6"/></svg><span>New file</span></button>
+      </div>
+      <div class="sep"></div>
+      <div class="cmd-group">
+        <button class="cmd" data-cmd="cut" title="Cut (Ctrl+X)"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8 16L18 4M16 16L6 4"/></svg></button>
+        <button class="cmd" data-cmd="copy" title="Copy (Ctrl+C)"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button>
+        <button class="cmd" data-cmd="paste" title="Paste (Ctrl+V)"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/></svg></button>
+        <button class="cmd" data-cmd="rename" title="Rename (F2)"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13 7l4 4"/></svg></button>
+        <button class="cmd" data-cmd="delete" title="Delete to Recycle Bin (Del)"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+      </div>
+      <div class="sep"></div>
+      <div class="cmd-group">
+        <button class="cmd" data-cmd="layout" title="Toggle details / tiles view"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span id="layoutLabel">Details</span></button>
+        <button class="cmd" data-cmd="preview" title="Toggle preview pane (Alt+P)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg><span>Preview</span></button>
+        <button class="cmd" data-cmd="hidden" title="Show hidden &amp; system items"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Hidden</span></button>
+      </div>
+      <div class="spacer"></div>
+      <button class="cmd accent" data-cmd="dupes-here" title="Find duplicate files in the current folder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="12" height="14" rx="2"/><rect x="9" y="7" width="12" height="14" rx="2"/></svg><span>Find duplicates here</span></button>
+    </div>
+
+    <div class="body">
+      <aside class="navpane" id="navpane"></aside>
+      <div class="splitter" data-split="nav"></div>
+      <main class="main" id="main" tabindex="-1"></main>
+      <div class="splitter" data-split="preview" id="previewSplitter"></div>
+      <aside class="previewpane" id="previewpane"></aside>
+    </div>
+
+    <footer class="statusbar">
+      <span id="status"></span>
+      <span class="spacer"></span>
+      <span id="statusRight"></span>
+    </footer>
+  </div>
+
+  <div id="ctxmenu" class="ctxmenu" hidden></div>
+  <div id="modalRoot"></div>
+  <div id="toasts" class="toasts"></div>
+  <script src="app.js"></script>
+</body>
+</html>
